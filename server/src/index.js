@@ -6,7 +6,7 @@ const connectDb = require('./utils/db');
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 // Health check
