@@ -218,7 +218,7 @@ body {
 }
 
 .participant-info {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.295);
   border-radius: 15px;
   padding: 20px;
   backdrop-filter: blur(10px);
@@ -228,7 +228,7 @@ body {
   font-size: 1.6rem;
   font-weight: bold;
   margin-bottom: 10px;
-  color: white;
+  color: #16601D;
 }
 
 .participant-position {
@@ -236,6 +236,7 @@ body {
   opacity: 0.9;
   margin-bottom: 15px;
   font-style: italic;
+  color: #16601D;
 }
 
 .time-info, .score-info {
@@ -246,16 +247,19 @@ body {
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+  color: #16601D;
 }
 
 .time-label, .score-label {
   font-size: 0.9rem;
   opacity: 0.8;
+  color: #16601D;
 }
 
 .time-value, .score-value {
   font-size: 1.1rem;
   font-weight: bold;
+  color: #16601D;
 }
 
 /* No Results */
