@@ -12,7 +12,9 @@ html, body {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #00FF88 0%, #1a5f3f 100%);
+  background: white url('/logo.png') no-repeat center center;
+  background-size: auto auto;
+  background-attachment: fixed;
   min-height: 100vh;
   color: #333;
 }
@@ -33,7 +35,7 @@ body {
 .header {
   text-align: center;
   margin-bottom: 40px;
-  color: white;
+  color: #16601D;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -44,13 +46,15 @@ body {
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: #16601D;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
   font-size: 1.2rem;
-  opacity: 0.9;
+  opacity: 0.8;
   font-weight: 300;
+  color: #1a5f3f;
 }
 
 /* Auto Update Indicator */
@@ -61,11 +65,12 @@ body {
   gap: 8px;
   margin-top: 15px;
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(22, 96, 29, 0.1);
   border-radius: 20px;
   font-size: 0.9rem;
   opacity: 0.8;
-  backdrop-filter: blur(10px);
+  color: #16601D;
+  border: 1px solid rgba(22, 96, 29, 0.2);
 }
 
 .update-icon {
@@ -74,9 +79,9 @@ body {
 }
 
 .manual-update-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  background: rgba(22, 96, 29, 0.2);
+  border: 1px solid rgba(22, 96, 29, 0.3);
+  color: #16601D;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -90,7 +95,7 @@ body {
 }
 
 .manual-update-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(22, 96, 29, 0.3);
   transform: scale(1.1);
 }
 
@@ -106,14 +111,14 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  color: white;
+  color: #16601D;
 }
 
 .loading-spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid white;
+  border: 4px solid rgba(22, 96, 29, 0.3);
+  border-top: 4px solid #16601D;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
@@ -131,14 +136,14 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  color: white;
+  color: #dc3545;
   text-align: center;
 }
 
 .retry-btn {
-  background: rgba(255, 255, 255, 0.2);
+  background: #dc3545;
   color: white;
-  border: 2px solid white;
+  border: 2px solid #dc3545;
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
@@ -148,8 +153,8 @@ body {
 }
 
 .retry-btn:hover {
-  background: white;
-  color: #1a5f3f;
+  background: #c82333;
+  border-color: #c82333;
 }
 
 /* Podium */
@@ -256,11 +261,11 @@ body {
 /* No Results */
 .no-results {
   text-align: center;
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
+  color: #16601D;
+  background: rgba(22, 96, 29, 0.1);
   padding: 40px;
   border-radius: 20px;
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(22, 96, 29, 0.2);
 }
 
 .no-results h3 {
@@ -278,7 +283,7 @@ body {
   position: fixed;
   top: 20px;
   right: 20px;
-  background: linear-gradient(135deg, #00FF88 0%, #1a5f3f 100%);
+  background: #16601D;
   color: white;
   padding: 12px 20px;
   border-radius: 8px;
@@ -303,7 +308,7 @@ body {
 .footer {
   margin-top: 40px;
   text-align: center;
-  color: white;
+  color: #16601D;
   opacity: 0.8;
   width: 100%;
   display: flex;
@@ -418,5 +423,4 @@ body {
   .participant-info {
     padding: 15px;
   }
-}
 }
