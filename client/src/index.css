@@ -9,14 +9,12 @@ body {
   background: white url('/logo.png') no-repeat center center;
   background-size: auto auto;
   background-attachment: fixed;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   color: #333;
 }
 
 #root {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 .container {
@@ -219,13 +217,7 @@ body {
 
 .auth-container {
   max-width: 400px;
-  margin: 0 auto;
-  padding: 10px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
+  margin: 100px auto;
 }
 
 .auth-container h1 {
