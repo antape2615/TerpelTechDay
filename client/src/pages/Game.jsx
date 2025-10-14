@@ -147,7 +147,7 @@ export default function Game({ playerInfo, onLogout }) {
 
   const finishGame = async () => {
     // Solo permitir terminar si se completaron todos los matches
-    if (score === originalPairs.length || score ==! originalPairs.length) {
+    if (score === originalPairs.length) {
       setFinalQuestionStartTime(Date.now())
       setGameState('finished')
       if (timerRef.current) {
@@ -155,12 +155,13 @@ export default function Game({ playerInfo, onLogout }) {
       }
     } else {
       // Si no completó todos los matches, marcarlo como descalificado
-      const totalTime = Date.now() - learningStartTime
+      // Usar solo el tiempo del juego de unir palabras
+      const gameTime = timeElapsed
       
       try {
         await gameService.finishGame(
           sessionId, 
-          totalTime,
+          gameTime,
           0, // learningTime - no necesario
           0, // gameTime - no necesario  
           0, // finalQuestionTime - no necesario
@@ -179,13 +180,14 @@ export default function Game({ playerInfo, onLogout }) {
   }
 
   const handleFinalQuestionsComplete = async (finalQuestionCorrect = false) => {
-    // Calcular el tiempo total desde el inicio
-    const totalTime = Date.now() - learningStartTime
+    // Usar solo el tiempo del juego de unir palabras (timeElapsed)
+    // NO incluir tiempo de tarjetas de aprendizaje ni pregunta final
+    const gameTime = timeElapsed
     
     try {
       await gameService.finishGame(
         sessionId, 
-        totalTime,
+        gameTime,
         0, // learningTime - no necesario
         0, // gameTime - no necesario  
         0, // finalQuestionTime - no necesario
