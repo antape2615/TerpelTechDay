@@ -96,8 +96,7 @@ export default function FinalQuestions({ playerPosition, sessionId, onComplete }
       })
       setSubmitted(true)
       
-      // Notificar al componente padre sobre el resultado
-      onComplete(isCorrect)
+      // NO llamar onComplete automáticamente, esperar a que el usuario haga clic en "Ver Resultados Finales"
     } catch (error) {
       console.error('Error submitting answer:', error)
       alert('Error al enviar la respuesta')
@@ -198,9 +197,31 @@ export default function FinalQuestions({ playerPosition, sessionId, onComplete }
               <p>{result.explanation}</p>
             </div>
 
+            <div style={{ 
+              textAlign: 'center', 
+              marginTop: '15px', 
+              padding: '10px', 
+              background: 'rgba(0, 255, 136, 0.1)', 
+              borderRadius: '8px',
+              border: '1px solid rgba(0, 255, 136, 0.3)'
+            }}>
+              <p style={{ margin: '0', color: '#1a5f3f', fontWeight: '500' }}>
+                Haz clic en el botón de abajo para ver tus resultados finales
+              </p>
+            </div>
+
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
-              <button onClick={() => onComplete(result.correct)} className="btn">
-                Ver Resultados Finales
+              <button 
+                onClick={() => onComplete(result.correct)} 
+                className="btn"
+                style={{ 
+                  padding: '12px 24px', 
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  background: result.correct ? 'linear-gradient(135deg, #00FF88 0%, #1a5f3f 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                }}
+              >
+                {result.correct ? '🎉 Ver Resultados Finales' : '📊 Ver Resultados Finales'}
               </button>
             </div>
           </div>

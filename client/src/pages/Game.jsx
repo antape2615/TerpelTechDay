@@ -147,7 +147,7 @@ export default function Game({ playerInfo, onLogout }) {
 
   const finishGame = async () => {
     // Solo permitir terminar si se completaron todos los matches
-    if (score === originalPairs.length) {
+    if (score === originalPairs.length || score ==! originalPairs.length) {
       setFinalQuestionStartTime(Date.now())
       setGameState('finished')
       if (timerRef.current) {
@@ -226,7 +226,6 @@ export default function Game({ playerInfo, onLogout }) {
           <h1 style={{ color: '#16601D' }}>Perxia Suite - Juego de Unir Palabras</h1>
           <div>
             <span style={{ marginRight: '20px' }}>Hola, {playerInfo?.name}</span>
-            <button onClick={onLogout} className="btn btn-secondary">Nuevo Jugador</button>
           </div>
         </div>
 
@@ -339,7 +338,7 @@ export default function Game({ playerInfo, onLogout }) {
         {gameState === 'completed' && (
           <div style={{ textAlign: 'center', padding: '20px' }}>
             <div style={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+              background: 'linear-gradient(135deg, #00FF88 0%, #1a5f3f 100%)', 
               color: 'white', 
               padding: '30px', 
               borderRadius: '15px',
@@ -379,7 +378,7 @@ export default function Game({ playerInfo, onLogout }) {
             </div>
             
             <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
-              <button onClick={resetGame} className="btn btn-primary" style={{ padding: '15px 30px', fontSize: '1.1rem' }}>
+              <button onClick={resetGame} className="btn" style={{ padding: '15px 30px', fontSize: '1.1rem' }}>
                 🎮 Nuevo Jugador
               </button>
             </div>
