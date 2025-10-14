@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { gameService } from '../services/authService'
-import QuestionModal from '../components/QuestionModal'
 import LearningCards from '../components/LearningCards'
 import FinalQuestions from '../components/FinalQuestions'
 
@@ -12,9 +11,9 @@ export default function Game({ playerInfo, onLogout }) {
   const [score, setScore] = useState(0)
   const [timeElapsed, setTimeElapsed] = useState(0)
   const [sessionId, setSessionId] = useState(playerInfo.sessionId)
-  const [currentQuestion, setCurrentQuestion] = useState(null)
   const [selectedTerm, setSelectedTerm] = useState(null)
   const [selectedDefinition, setSelectedDefinition] = useState(null)
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
   
   // Tiempos por sección
   const [learningStartTime, setLearningStartTime] = useState(Date.now())
@@ -61,44 +60,51 @@ export default function Game({ playerInfo, onLogout }) {
         setSelectedTerm(null)
       } else {
         setSelectedTerm(item)
-        setSelectedDefinition(null)
+        // Si ya hay una definición seleccionada, hacer match automático
+        if (selectedDefinition) {
+          handleAutoMatch(item, selectedDefinition)
+        }
       }
     } else {
       if (selectedDefinition === item) {
         setSelectedDefinition(null)
       } else {
         setSelectedDefinition(item)
-        setSelectedTerm(null)
+        // Si ya hay un término seleccionado, hacer match automático
+        if (selectedTerm) {
+          handleAutoMatch(selectedTerm, item)
+        }
       }
     }
   }
 
-  const handleMatch = async () => {
-    if (!selectedTerm || !selectedDefinition) return
-
-    const isCorrect = checkMatch(selectedTerm, selectedDefinition)
+  const handleAutoMatch = async (term, definition) => {
+    const isCorrect = checkMatch(term, definition)
     const matchTime = Date.now() - startTimeRef.current
 
     // Registrar match en el servidor
     try {
-      await gameService.submitMatch(sessionId, selectedTerm, selectedDefinition, isCorrect, matchTime)
+      await gameService.submitMatch(sessionId, term, definition, isCorrect, matchTime)
     } catch (error) {
       console.error('Error submitting match:', error)
     }
 
     if (isCorrect) {
-      setMatchedPairs(prev => [...prev, { term: selectedTerm, definition: selectedDefinition }])
-      setScore(prev => prev + 1)
+      // Mostrar animación de éxito
+      setShowSuccessAnimation(true)
       
-      // Remover items de las listas
-      setTerms(prev => prev.filter(t => t !== selectedTerm))
-      setDefinitions(prev => prev.filter(d => d !== selectedDefinition))
-      
-      // Mostrar pregunta
-      setCurrentQuestion({
-        question: `¿Qué agente corresponde a "${selectedTerm}"?`,
-        correctAnswer: selectedTerm
-      })
+      setTimeout(() => {
+        setMatchedPairs(prev => [...prev, { term: term, definition: definition }])
+        setScore(prev => prev + 1)
+        
+        // Remover items de las listas
+        setTerms(prev => prev.filter(t => t !== term))
+        setDefinitions(prev => prev.filter(d => d !== definition))
+        
+        // NO mostrar pregunta intermedia, continuar con el juego
+        
+        setShowSuccessAnimation(false)
+      }, 800) // Mostrar verde por 0.8 segundos (más rápido)
     } else {
       // Mostrar feedback de error
       alert('❌ Incorrecto. Intenta de nuevo.')
@@ -109,7 +115,15 @@ export default function Game({ playerInfo, onLogout }) {
 
     // Verificar si el juego terminó
     if (terms.length <= 1 && definitions.length <= 1) {
-      finishGame()
+      // Cuando se complete el último match, ir directamente a la pregunta final
+      console.log('🎯 Todos los matches completados, yendo a pregunta final...')
+      setTimeout(() => {
+        setFinalQuestionStartTime(Date.now())
+        setGameState('finished')
+        if (timerRef.current) {
+          clearInterval(timerRef.current)
+        }
+      }, 2000) // Esperar 2 segundos después del último match
     }
   }
 
@@ -132,39 +146,53 @@ export default function Game({ playerInfo, onLogout }) {
   }
 
   const finishGame = async () => {
-    const totalTime = Date.now() - startTimeRef.current
-    
-    try {
-      await gameService.finishGame(sessionId, totalTime)
-    } catch (error) {
-      console.error('Error finishing game:', error)
-    }
-    
-    setFinalQuestionStartTime(Date.now())
-    setGameState('finished')
-    if (timerRef.current) {
-      clearInterval(timerRef.current)
+    // Solo permitir terminar si se completaron todos los matches
+    if (score === originalPairs.length) {
+      setFinalQuestionStartTime(Date.now())
+      setGameState('finished')
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+    } else {
+      // Si no completó todos los matches, marcarlo como descalificado
+      const totalTime = Date.now() - learningStartTime
+      
+      try {
+        await gameService.finishGame(
+          sessionId, 
+          totalTime,
+          0, // learningTime - no necesario
+          0, // gameTime - no necesario  
+          0, // finalQuestionTime - no necesario
+          score,
+          false, // finalQuestionCorrect = false (descalificado)
+          true // isDisqualified = true
+        )
+        console.log('✅ Jugador descalificado por terminar prematuramente')
+      } catch (error) {
+        console.error('Error saving disqualified data:', error)
+      }
+      
+      setGameState('completed')
+      alert('⚠️ Has terminado el juego prematuramente. Quedas descalificado.')
     }
   }
 
   const handleFinalQuestionsComplete = async (finalQuestionCorrect = false) => {
-    // Calcular todos los tiempos
-    const learningTime = gameStartTime ? gameStartTime - learningStartTime : 0
-    const gameTime = finalQuestionStartTime ? finalQuestionStartTime - gameStartTime : 0
-    const finalQuestionTime = Date.now() - (finalQuestionStartTime || Date.now())
+    // Calcular el tiempo total desde el inicio
     const totalTime = Date.now() - learningStartTime
     
     try {
       await gameService.finishGame(
         sessionId, 
         totalTime,
-        learningTime,
-        gameTime,
-        finalQuestionTime,
+        0, // learningTime - no necesario
+        0, // gameTime - no necesario  
+        0, // finalQuestionTime - no necesario
         score,
         finalQuestionCorrect
       )
-      console.log('✅ Datos completos guardados en BD')
+      console.log('✅ Datos guardados en BD - UNA SOLA VEZ')
     } catch (error) {
       console.error('Error saving complete data:', error)
     }
@@ -195,7 +223,7 @@ export default function Game({ playerInfo, onLogout }) {
     <div className="container">
       <div className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h1>Perxia Suite - Juego de Unir Palabras</h1>
+          <h1 style={{ color: '#16601D' }}>Perxia Suite - Juego de Unir Palabras</h1>
           <div>
             <span style={{ marginRight: '20px' }}>Hola, {playerInfo?.name}</span>
             <button onClick={onLogout} className="btn btn-secondary">Nuevo Jugador</button>
@@ -219,45 +247,61 @@ export default function Game({ playerInfo, onLogout }) {
             <div className="game-grid">
               <div className="game-column">
                 <h3>Agentes de IA</h3>
-                {terms.map((term, index) => (
-                  <div
-                    key={`term-${index}`}
-                    className={`game-item ${matchedPairs.some(p => p.term === term) ? 'matched' : ''} ${selectedTerm === term ? 'selected' : ''}`}
-                    onClick={() => handleItemClick(term, 'term')}
-                  >
-                    {term}
-                  </div>
-                ))}
+                {terms.map((term, index) => {
+                  const isMatched = matchedPairs.some(p => p.term === term)
+                  const isSelected = selectedTerm === term
+                  const isShowingSuccess = showSuccessAnimation && isSelected && selectedDefinition
+                  return (
+                    <div
+                      key={`term-${index}`}
+                      className={`game-item ${isMatched ? 'matched' : ''} ${isSelected ? 'selected' : ''} ${isShowingSuccess ? 'success-animation' : ''}`}
+                      onClick={() => !isMatched && handleItemClick(term, 'term')}
+                      style={{ 
+                        display: isMatched ? 'none' : 'block',
+                        cursor: isMatched ? 'default' : 'pointer'
+                      }}
+                    >
+                      {term}
+                    </div>
+                  )
+                })}
               </div>
 
               <div className="game-column">
                 <h3>Definiciones</h3>
-                {definitions.map((definition, index) => (
-                  <div
-                    key={`def-${index}`}
-                    className={`game-item ${matchedPairs.some(p => p.definition === definition) ? 'matched' : ''} ${selectedDefinition === definition ? 'selected' : ''}`}
-                    onClick={() => handleItemClick(definition, 'definition')}
-                  >
-                    {definition}
-                  </div>
-                ))}
+                {definitions.map((definition, index) => {
+                  const isMatched = matchedPairs.some(p => p.definition === definition)
+                  const isSelected = selectedDefinition === definition
+                  const isShowingSuccess = showSuccessAnimation && isSelected && selectedTerm
+                  return (
+                    <div
+                      key={`def-${index}`}
+                      className={`game-item ${isMatched ? 'matched' : ''} ${isSelected ? 'selected' : ''} ${isShowingSuccess ? 'success-animation' : ''}`}
+                      onClick={() => !isMatched && handleItemClick(definition, 'definition')}
+                      style={{ 
+                        display: isMatched ? 'none' : 'block',
+                        cursor: isMatched ? 'default' : 'pointer'
+                      }}
+                    >
+                      {definition}
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
             {(selectedTerm || selectedDefinition) && (
               <div className="match-controls">
                 <div className="selected-items">
-                  {selectedTerm && <div className="selected-item">Término: {selectedTerm}</div>}
+                  {selectedTerm && <div className="selected-item">Agente: {selectedTerm}</div>}
                   {selectedDefinition && <div className="selected-item">Definición: {selectedDefinition}</div>}
+                  {selectedTerm && selectedDefinition && (
+                    <div className="selected-item" style={{ color: '#667eea', fontWeight: 'bold' }}>
+                      Selecciona otro elemento para formar un par automático
+                    </div>
+                  )}
                 </div>
-                <button 
-                  onClick={handleMatch}
-                  disabled={!selectedTerm || !selectedDefinition}
-                  className="btn btn-success"
-                >
-                  Unir Selección
-                </button>
-                <button 
+                <button
                   onClick={() => {
                     setSelectedTerm(null)
                     setSelectedDefinition(null)
@@ -270,9 +314,16 @@ export default function Game({ playerInfo, onLogout }) {
             )}
 
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
-              <button onClick={finishGame} className="btn btn-danger">
-                Terminar Juego
-              </button>
+              {score === originalPairs.length ? (
+                <div style={{ padding: '20px', background: '#d4edda', borderRadius: '8px', marginBottom: '20px' }}>
+                  <h3 style={{ color: '#155724', margin: '0 0 10px 0' }}>🎉 ¡Todos los matches completados!</h3>
+                  <p style={{ color: '#155724', margin: '0' }}>Ahora responderás la pregunta final según tu cargo</p>
+                </div>
+              ) : (
+                <button onClick={finishGame} className="btn btn-danger">
+                  Terminar Juego
+                </button>
+              )}
             </div>
           </>
         )}
@@ -286,28 +337,56 @@ export default function Game({ playerInfo, onLogout }) {
         )}
 
         {gameState === 'completed' && (
-          <div style={{ textAlign: 'center' }}>
-            <h2>¡Juego Completado!</h2>
-            <div className="score">
-              Puntuación Final: {score} / {originalPairs.length}
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <div style={{ 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+              color: 'white', 
+              padding: '30px', 
+              borderRadius: '15px',
+              marginBottom: '20px'
+            }}>
+              <h2 style={{ margin: '0 0 20px 0', fontSize: '2.5rem' }}>🎉 ¡Juego Completado!</h2>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.2)', padding: '20px', borderRadius: '10px' }}>
+                  <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem' }}>📊 Puntuación</h3>
+                  <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                    {score} / {originalPairs.length}
+                  </div>
+                  <div style={{ fontSize: '1rem', opacity: 0.9 }}>
+                    {Math.round((score / originalPairs.length) * 100)}% de aciertos
+                  </div>
+                </div>
+                
+                <div style={{ background: 'rgba(255,255,255,0.2)', padding: '20px', borderRadius: '10px' }}>
+                  <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem' }}>⏱️ Tiempo Total</h3>
+                  <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                    {formatTime(timeElapsed)}
+                  </div>
+                  <div style={{ fontSize: '1rem', opacity: 0.9 }}>
+                    Promedio: {Math.round(timeElapsed / originalPairs.length / 1000)}s por match
+                  </div>
+                </div>
+              </div>
+              
+              <div style={{ background: 'rgba(255,255,255,0.2)', padding: '20px', borderRadius: '10px' }}>
+                <h3 style={{ margin: '0 0 10px 0', fontSize: '1.5rem' }}>👤 Información del Jugador</h3>
+                <div style={{ fontSize: '1.1rem' }}>
+                  <strong>{playerInfo.name}</strong><br/>
+                  {playerInfo.position} • {playerInfo.email}
+                </div>
+              </div>
             </div>
-            <div className="timer">
-              Tiempo Total: {formatTime(timeElapsed)}
+            
+            <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
+              <button onClick={resetGame} className="btn btn-primary" style={{ padding: '15px 30px', fontSize: '1.1rem' }}>
+                🎮 Nuevo Jugador
+              </button>
             </div>
-            <button onClick={resetGame} className="btn">
-              Nuevo Jugador
-            </button>
           </div>
         )}
       </div>
 
-      {currentQuestion && (
-        <QuestionModal
-          question={currentQuestion.question}
-          onAnswer={handleQuestionAnswer}
-          onClose={() => setCurrentQuestion(null)}
-        />
-      )}
     </div>
   )
 }

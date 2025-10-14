@@ -69,7 +69,7 @@ export default function LearningCards({ onComplete }) {
     <div className="learning-container">
       <div className="card">
         <div className="learning-header">
-          <h2>Conoce los Agentes de Perxia Suite</h2>
+          <h2 style={{ color: '#16601D' }}>Conoce los Agentes de Perxia Suite</h2>
           <div className="progress-bar">
             <div className="progress-fill" style={{ width: `${progress}%` }}></div>
           </div>

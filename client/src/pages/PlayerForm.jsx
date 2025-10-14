@@ -82,9 +82,9 @@ export default function PlayerForm({ onPlayerSubmit }) {
 
   return (
     <div className="auth-container">
-      <h1>Perxia Suite</h1>
+      <h1 style={{ color: '#16601D' }}>Perxia Suite</h1>
       <div className="card">
-        <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#00FF88', fontSize: '24px' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#16601D', fontSize: '24px' }}>
           ¡Bienvenido al Juego de Perxia Suite!
         </h2>
         <p style={{ textAlign: 'center', marginBottom: '25px', color: '#666', fontSize: '16px', lineHeight: '1.5' }}>
@@ -143,6 +143,11 @@ export default function PlayerForm({ onPlayerSubmit }) {
               <option value="">Selecciona tu cargo</option>
               <option value="Desarrollador">Desarrollador</option>
               <option value="Analista">Analista</option>
+              <option value="QA">QA</option>
+              <option value="PO">PO (Product Owner)</option>
+              <option value="Líder Técnico">Líder Técnico</option>
+              <option value="Arquitecto">Arquitecto</option>
+              <option value="Scrum Master">Scrum Master</option>
             </select>
           </div>
 
@@ -159,14 +164,16 @@ export default function PlayerForm({ onPlayerSubmit }) {
         </form>
 
         <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-          <h4 style={{ color: '#00FF88', marginBottom: '10px' }}>¿Cómo jugar?</h4>
-          <ul style={{ color: '#666', fontSize: '14px', lineHeight: '1.6', paddingLeft: '20px' }}>
-            <li>Toca un agente de IA y luego su definición correcta</li>
-            <li>Haz clic en "Unir Selección" para verificar</li>
-            <li>Cuando aciertes, responderás una pregunta adicional</li>
-            <li>El juego registra tu tiempo y puntuación</li>
-            <li>¡Diviértete aprendiendo sobre Perxia Suite!</li>
-          </ul>
+          <h4 style={{ color: '#667eea', marginBottom: '10px' }}>¿Cómo jugar?</h4>
+              <ul style={{ color: '#666', fontSize: '14px', lineHeight: '1.6', paddingLeft: '20px' }}>
+                <li>Toca un agente de IA de la primera columna</li>
+                <li>Toca su definición correcta en la segunda columna</li>
+                <li>El match se hace automáticamente cuando seleccionas uno de cada columna</li>
+                <li>Continúa hasta completar todos los 9 matches</li>
+                <li>Al final responderás una pregunta según tu cargo</li>
+                <li>El juego registra tu tiempo y puntuación</li>
+                <li>¡Diviértete aprendiendo sobre Perxia Suite!</li>
+              </ul>
         </div>
       </div>
     </div>

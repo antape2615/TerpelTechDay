@@ -6,13 +6,17 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #00FF88 0%, #1a5f3f 100%);
-  min-height: 100vh;
+  background: white url('/logo.png') no-repeat center center;
+  background-size: auto auto;
+  background-attachment: fixed;
+  height: 100vh;
+  overflow: hidden;
   color: #333;
 }
 
 #root {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .container {
@@ -215,7 +219,13 @@ body {
 
 .auth-container {
   max-width: 400px;
-  margin: 100px auto;
+  margin: 0 auto;
+  padding: 10px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .auth-container h1 {
@@ -610,6 +620,15 @@ body {
   color: #155724;
 }
 
+.game-item.success-animation {
+  background: #d4edda !important;
+  border-color: #28a745 !important;
+  color: #155724 !important;
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+  transition: all 0.3s ease;
+}
+
 .result-message.incorrect {
   background: #f8d7da;
   border: 2px solid #dc3545;
@@ -681,5 +700,23 @@ body {
   
   .final-questions-container {
     padding: 10px;
+  }
+  
+  /* Responsive para vista de resultados finales */
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+  
+  div[style*="font-size: 2.5rem"] {
+    font-size: 2rem !important;
+  }
+  
+  div[style*="font-size: 2rem"] {
+    font-size: 1.5rem !important;
+  }
+  
+  div[style*="font-size: 1.5rem"] {
+    font-size: 1.2rem !important;
   }
 }
