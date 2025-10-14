@@ -1,0 +1,74 @@
+Perxia-QA
+Qué es: Un agente de IA para automatización de pruebas.
+Cómo funciona:
+Primera forma a partir de texto, documentos o imágenes, genera casos de prueba automáticos usando plantillas predefinidas.
+Segunda forma, se integra con Azure DevOps Automate, lo que permite crear y registrar casos de prueba de forma automática, incluso sin necesidad de contar con licencia de Test Plans.
+Para qué sirve:
+Agiliza la creación de test cases en proyectos donde no se dispone de licencias costosas de Test Plan.
+Reduce tiempos en la fase de QA, estandariza la documentación de pruebas y facilita la integración con flujos.
+ 
+Perxia-Dev
+Qué es: Una extensión de VS Code que funciona como un copilot corporativo.
+Cómo funciona:
+Se instala directamente en el entorno de desarrollo.
+El agente puede sugerir código, completar funciones y dar recomendaciones, igual que GitHub Copilot.
+La diferencia clave es que está entrenado con conocimiento y datos internos de la empresa (repos, librerías internas, estándares de arquitectura).
+Para qué sirve:
+Permite a los desarrolladores escribir código más rápido y alineado con las buenas prácticas corporativas.
+Facilita la curva de aprendizaje de nuevos integrantes del equipo.
+Reduce la dependencia de documentación dispersa, porque las respuestas están contextualizadas en el código de la organización..
+ 
+Perxia-Assist
+Qué es: Un agente de IA para gestión de conocimiento a partir de reuniones.
+Cómo funciona:
+Toma las grabaciones y transcripciones de las reuniones 
+A partir de eso, se conecta a un chatbot que permite hacer preguntas sobre la sesión (ejemplo: “¿qué se acordó en la reunión del lunes?”).
+Puede integrarse con flujos adicionales para el llenado automático de documentación (actas, acuerdos, minutas, etc.).
+Para qué sirve:
+Evita pérdida de información clave en reuniones.
+Centraliza acuerdos y tareas en un espacio consultable.
+Reduce tiempos de transcripción manual y redacción de actas.
+ 
+Perxia-agentic
+Qué es: El frontend de interacción multi-agente.
+Cómo funciona: Es una interfaz (Angular microfrontend) que integra distintos agentes en un solo flujo conversacional. Permite subir archivos, visualizar documentos generados, chatear y cambiar entre agentes.
+Para qué sirve: Se convierte en la puerta de entrada del ecosistema de IA para usuarios finales, con un UX unificado y flexible.
+ 
+Perxia-Hada
+Qué es: Agente de IA especializado en automatización de procesos internos de Periferia 
+Cómo funciona: Orquesta flujos automáticos en los sistemas internos, conectando formularios, bases de datos y notificaciones.
+Para qué sirve: Optimiza procesos repetitivos internos, reduciendo carga operativa en soporte y operaciones.
+ 
+Perxia-Bot
+Qué es: El agente de IA corporativo de Periferia, un ChatGPT empresarial.
+Cómo funciona:
+Se presenta en la página web de la compañía como un chat interactivo para clientes.
+Responde sobre la organización, sus soluciones y servicios.
+Puede integrarse con la base de conocimiento interna para responder tanto a clientes como a colaboradores.
+Para qué sirve:
+Mejora la experiencia de los clientes al ofrecerles un canal directo de información 24/7.
+Posiciona a la compañía como pionera en el uso de IA en su propio ecosistema.
+Se convierte en el embajador digital de Periferia IT, mostrando innovación y facilitando procesos de relacionamiento comercial.
+ 
+Perxia-Eval
+Qué es: Un agente orientado a evaluación y control de calidad de código.
+Cómo funciona: En hackatones o desarrollos internos, crea ramas en GitHub, analiza PRs y valida cumplimiento de estándares.
+Para qué sirve: Ayuda en procesos de formación (semilleros, hackathons) y asegura que el código entregado tenga calidad mínima garantizada.
+ 
+Perxia-Cloud
+Qué es: Agente de automatización de infraestructura.
+Cómo funciona: Usa plantillas (ej. Bicep, Terraform) para desplegar infraestructuras multi-cloud (Azure, AWS, GCP). Se integra con Azure DevOps y pipelines.
+Para qué sirve: Facilita despliegues ágiles y repetibles, asegurando escalabilidad y portabilidad en arquitecturas híbridas o multi-nube.
+ 
+Perxia-Unit
+Qué es: Un agente de IA especializado en pruebas unitarias.
+Cómo funciona:
+Se conecta a los repositorios de código (Node, Python, Java, Go, Angular, React, etc.).
+Detecta automáticamente archivos de lógica que no tienen pruebas o que tienen cobertura insuficiente (<85%).
+Genera, completa o mejora las pruebas unitarias con los frameworks apropiados (Jest, Karma, PyTest, GoTest, JUnit, etc.).
+Puede ejecutar los tests y producir reportes de cobertura en HTML listos para CI/CD.
+Para qué sirve:
+Garantiza que el software cumpla con un nivel mínimo de calidad y confiabilidad.
+Reduce la carga manual de los desarrolladores en la creación de pruebas.
+Asegura estándares de cobertura definidos por la organización (85% mínimo, con meta de llegar al 100%)
+ 
