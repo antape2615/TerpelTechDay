@@ -12,7 +12,7 @@ html, body {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: white url('/logo.png') no-repeat center center;
+  background: white url('/LogoCompleto.png') no-repeat center center;
   background-size: auto auto;
   background-attachment: fixed;
   min-height: 100vh;

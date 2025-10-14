@@ -20,11 +20,71 @@ const questionsByPosition = {
     correctAnswers: ['Perxia-QA'],
     explanation: 'Perxia-QA automatizaría las pruebas funcionales tanto en su parte de IA como su automatización.'
   },
-  'PO': {
+  'Product Owner': {
     question: 'Como Product Owner, necesitas recopilar feedback de usuarios y documentar requerimientos, ¿qué agentes usarías?',
     options: ['Perxia-Assist', 'Perxia-Bot', 'Perxia-agentic', 'Perxia-Hada'],
     correctAnswers: ['Perxia-Assist', 'Perxia-Bot'],
     explanation: 'Perxia-Assist gestionaría el conocimiento de reuniones y feedback, mientras que Perxia-Bot interactuaría directamente con los usuarios.'
+  },
+  'DevOps': {
+    question: 'Para automatizar el despliegue y monitoreo de aplicaciones en múltiples entornos, ¿qué agentes Perxia implementarías?',
+    options: ['Perxia-Cloud', 'Perxia-Hada', 'Perxia-Eval', 'Perxia-agentic'],
+    correctAnswers: ['Perxia-Cloud'],
+    explanation: 'Perxia-Cloud automatizaría la infraestructura y despliegues'
+  },
+  'Data Analyst': {
+    question: 'Para analizar grandes volúmenes de datos y generar insights, ¿qué agentes Perxia utilizarías?',
+    options: ['Perxia-Assist', 'Perxia-Bot', 'Perxia-agentic', 'Perxia-Eval'],
+    correctAnswers: ['Perxia-Assist', 'Perxia-Agentic'],
+    explanation: 'Perxia-Assist procesaría y estructuraría los datos, mientras que Perxia-Agentic te conecta agentes que te generarían reportes y insights automáticamente.'
+  },
+  'BD': {
+    question: 'Para optimizar y mantener bases de datos, ¿qué agentes Perxia implementarías?',
+    options: ['Perxia-Cloud', 'Perxia-Eval', 'Perxia-Hada', 'Perxia-Unit'],
+    correctAnswers: ['Perxia-Cloud', 'Perxia-Eval'],
+    explanation: 'Perxia-Cloud gestionaría la infraestructura de BD y Perxia-Eval evaluaría el rendimiento y optimización.'
+  },
+  'Diseñador UX': {
+    question: 'Para crear experiencias de usuario basadas en datos y feedback, ¿qué agentes Perxia usarías?',
+    options: ['Perxia-Assist', 'Perxia-Bot', 'Perxia-agentic', 'Perxia-Hada'],
+    correctAnswers: ['Perxia-Assist'],
+    explanation: 'Perxia-Assist analizaría el feedback de usuarios'
+  },
+  'Ingeniero de Seguridad': {
+    question: 'Para implementar y monitorear la seguridad de aplicaciones, ¿qué agentes Perxia utilizarías?',
+    options: ['Perxia-Eval', 'Perxia-Cloud', 'Perxia-Hada', 'Perxia-agentic'],
+    correctAnswers: ['Perxia-Eval', 'Perxia-Cloud'],
+    explanation: 'Perxia-Eval evaluaría vulnerabilidades y Perxia-Cloud implementaría controles de seguridad en la infraestructura.'
+  },
+  'Customer Manager': {
+    question: 'Para gestionar relaciones con clientes y mejorar la experiencia, ¿qué agentes Perxia implementarías?',
+    options: ['Perxia-Bot', 'Perxia-Assist', 'Perxia-agentic', 'Perxia-Hada'],
+    correctAnswers: ['Perxia-Bot', 'Perxia-Assist'],
+    explanation: 'Perxia-Bot interactuaría directamente con clientes y Perxia-Assist gestionaría el conocimiento de las interacciones.'
+  },
+  'Community Manager': {
+    question: 'Para gestionar comunidades y generar engagement, ¿qué agentes Perxia usarías?',
+    options: ['Perxia-Bot', 'Perxia-Assist', 'Perxia-agentic', 'Perxia-Hada'],
+    correctAnswers: ['Perxia-Bot', 'Perxia-Assist'],
+    explanation: 'Perxia-Bot automatizaría respuestas y engagement, mientras que Perxia-Assist analizaría el sentimiento de la comunidad.'
+  },
+  'Ingeniero de Soporte': {
+    question: 'Para brindar soporte técnico eficiente y escalable, ¿qué agentes Perxia implementarías?',
+    options: ['Perxia-Bot', 'Perxia-Assist', 'Perxia-Hada', 'Perxia-Eval'],
+    correctAnswers: ['Perxia-Bot', 'Perxia-Assist'],
+    explanation: 'Perxia-Bot resolvería consultas comunes automáticamente y Perxia-Assist gestionaría el conocimiento de soluciones.'
+  },
+  'Reclutador': {
+    question: 'Para optimizar el proceso de reclutamiento y selección, ¿qué agentes Perxia utilizarías?',
+    options: ['Perxia-Assist', 'Perxia-Bot', 'Perxia-Hada', 'Perxia-agentic'],
+    correctAnswers: ['Perxia-Assist', 'Perxia-Bot'],
+    explanation: 'Perxia-Assist analizaría perfiles y Perxia-Bot automatizaría la comunicación inicial con candidatos.'
+  },
+  'Documentador de Procesos': {
+    question: 'Para documentar y mantener procesos organizacionales, ¿qué agentes Perxia implementarías?',
+    options: ['Perxia-Assist', 'Perxia-Hada', 'Perxia-Bot', 'Perxia-agentic'],
+    correctAnswers: ['Perxia-Assist', 'Perxia-Agentic'],
+    explanation: 'Perxia-Assist estructuraría y organizaría la documentación, mientras que Perxia-Agentic te conecta agentes que automatizarían la actualización de procesos.'
   },
   'Líder Técnico': {
     question: 'Para liderar un equipo de desarrollo y asegurar la calidad del código, ¿qué agentes Perxia implementarías?',
@@ -52,7 +112,68 @@ export default function FinalQuestions({ playerPosition, sessionId, onComplete }
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const questionData = questionsByPosition[playerPosition] || questionsByPosition['Desarrollador']
+  // Función para detectar el tipo de cargo basado en palabras clave
+  const detectPositionType = (position) => {
+    const pos = position.toLowerCase()
+    
+    if (pos.includes('desarrollador') || pos.includes('developer') || pos.includes('programador') || pos.includes('frontend') || pos.includes('backend') || pos.includes('fullstack')) {
+      return 'Desarrollador'
+    }
+    if (pos.includes('analista') || pos.includes('analyst') || pos.includes('business analyst')) {
+      return 'Analista'
+    }
+    if (pos.includes('qa') || pos.includes('tester') || pos.includes('testing') || pos.includes('quality')) {
+      return 'QA'
+    }
+    if (pos.includes('product owner') || pos.includes('po') || pos.includes('product manager')) {
+      return 'Product Owner'
+    }
+    if (pos.includes('devops') || pos.includes('dev ops') || pos.includes('sre') || pos.includes('site reliability')) {
+      return 'DevOps'
+    }
+    if (pos.includes('data analyst') || pos.includes('data scientist') || pos.includes('analista de datos')) {
+      return 'Data Analyst'
+    }
+    if (pos.includes('bd') || pos.includes('base de datos') || pos.includes('database') || pos.includes('dba')) {
+      return 'BD'
+    }
+    if (pos.includes('diseñador') || pos.includes('designer') || pos.includes('ux') || pos.includes('ui') || pos.includes('user experience')) {
+      return 'Diseñador UX'
+    }
+    if (pos.includes('seguridad') || pos.includes('security') || pos.includes('cybersecurity') || pos.includes('infosec')) {
+      return 'Ingeniero de Seguridad'
+    }
+    if (pos.includes('customer') || pos.includes('cliente') || pos.includes('account manager')) {
+      return 'Customer Manager'
+    }
+    if (pos.includes('community') || pos.includes('comunidad') || pos.includes('social media')) {
+      return 'Community Manager'
+    }
+    if (pos.includes('soporte') || pos.includes('support') || pos.includes('helpdesk') || pos.includes('help desk')) {
+      return 'Ingeniero de Soporte'
+    }
+    if (pos.includes('reclutador') || pos.includes('recruiter') || pos.includes('talent acquisition') || pos.includes('hr')) {
+      return 'Reclutador'
+    }
+    if (pos.includes('documentador') || pos.includes('documentation') || pos.includes('procesos') || pos.includes('process')) {
+      return 'Documentador de Procesos'
+    }
+    if (pos.includes('líder') || pos.includes('leader') || pos.includes('lead') || pos.includes('tech lead') || pos.includes('team lead')) {
+      return 'Líder Técnico'
+    }
+    if (pos.includes('arquitecto') || pos.includes('architect') || pos.includes('solution architect')) {
+      return 'Arquitecto'
+    }
+    if (pos.includes('scrum') || pos.includes('master') || pos.includes('agile coach')) {
+      return 'Scrum Master'
+    }
+    
+    // Por defecto, usar Desarrollador
+    return 'Desarrollador'
+  }
+
+  const positionType = detectPositionType(playerPosition)
+  const questionData = questionsByPosition[positionType] || questionsByPosition['Desarrollador']
 
   const handleAnswerToggle = (option) => {
     if (submitted) return
@@ -112,10 +233,15 @@ export default function FinalQuestions({ playerPosition, sessionId, onComplete }
   return (
     <div className="final-questions-container">
       <div className="card">
-        <div className="final-questions-header">
-          <h2>Pregunta Final</h2>
-          <p className="position-badge">Para: {playerPosition}</p>
-        </div>
+            <div className="final-questions-header">
+              <h2>Pregunta Final</h2>
+              <p className="position-badge">Para: {playerPosition}</p>
+              {positionType !== playerPosition && (
+                <p className="position-detected" style={{ fontSize: '0.9rem', color: '#666', marginTop: '5px' }}>
+                  (Pregunta adaptada para: {positionType})
+                </p>
+              )}
+            </div>
 
         <div className="question-content">
           <h3>{questionData.question}</h3>

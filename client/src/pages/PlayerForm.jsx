@@ -5,7 +5,8 @@ export default function PlayerForm({ onPlayerSubmit }) {
     name: '',
     email: '',
     phone: '',
-    position: ''
+    position: '',
+    positionOfficial: ''
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -58,8 +59,12 @@ export default function PlayerForm({ onPlayerSubmit }) {
       console.log('✅ Datos del juego recibidos:', gameData)
       
       // Pasar la información del jugador y los datos del juego
+      // Usar el cargo oficial si está disponible, sino usar el cargo del selector
+      const finalPosition = formData.positionOfficial.trim() || formData.position
+      
       onPlayerSubmit({
         ...formData,
+        position: finalPosition, // Usar el cargo final (oficial o del selector)
         sessionId: gameData.sessionId,
         terms: gameData.terms,
         definitions: gameData.definitions,
@@ -82,6 +87,17 @@ export default function PlayerForm({ onPlayerSubmit }) {
 
   return (
     <div className="auth-container">
+      <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+        <img 
+          src="/LogoCompleto.png" 
+          alt="Logo Periferia IT GROUP" 
+          style={{ 
+            maxWidth: '250px', 
+            height: 'auto',
+            marginBottom: '10px'
+          }} 
+        />
+      </div>
       <h1 style={{ color: '#16601D' }}>Perxia Suite</h1>
       <div className="card">
         <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#16601D', fontSize: '24px' }}>
@@ -144,11 +160,36 @@ export default function PlayerForm({ onPlayerSubmit }) {
               <option value="Desarrollador">Desarrollador</option>
               <option value="Analista">Analista</option>
               <option value="QA">QA</option>
-              <option value="PO">PO (Product Owner)</option>
+              <option value="Product Owner">Product Owner</option>
+              <option value="DevOps">DevOps</option>
+              <option value="Data Analyst">Data Analyst</option>
+              <option value="BD">BD (Base de Datos)</option>
+              <option value="Diseñador UX">Diseñador UX</option>
+              <option value="Ingeniero de Seguridad">Ingeniero de Seguridad</option>
+              <option value="Customer Manager">Customer Manager</option>
+              <option value="Community Manager">Community Manager</option>
+              <option value="Ingeniero de Soporte">Ingeniero de Soporte</option>
+              <option value="Reclutador">Reclutador</option>
+              <option value="Documentador de Procesos">Documentador de Procesos</option>
               <option value="Líder Técnico">Líder Técnico</option>
               <option value="Arquitecto">Arquitecto</option>
               <option value="Scrum Master">Scrum Master</option>
             </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="positionOfficial">Nombre oficial del cargo</label>
+            <input
+              type="text"
+              id="positionOfficial"
+              name="positionOfficial"
+              value={formData.positionOfficial}
+              onChange={handleChange}
+              placeholder="Ej: Senior Frontend Developer, Business Analyst, etc."
+            />
+            <small style={{ color: '#666', fontSize: '12px', marginTop: '5px', display: 'block' }}>
+              Escribe el nombre de tu cargo oficial
+            </small>
           </div>
 
           {error && <div className="error">{error}</div>}
