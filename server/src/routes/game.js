@@ -146,9 +146,11 @@ router.post('/finish', async (req, res) => {
     skippedMatches: session.skippedMatches
   });
   
-  // Si ya está descalificado, mantener ese estado
-  if (session.disqualified) {
-    console.log('⚠️ Sesión ya marcada como descalificada, manteniendo estado');
+  // Si ya está descalificado o ya terminó, mantener ese estado
+  if (session.disqualified || session.finishedAt) {
+    console.log('⚠️ Sesión ya marcada como descalificada o terminada, manteniendo estado');
+    console.log('   - Disqualified:', session.disqualified);
+    console.log('   - FinishedAt:', session.finishedAt);
   }
   
   // Solo guardar en inscritos, no en GameSession
@@ -172,6 +174,9 @@ router.post('/finish', async (req, res) => {
       return res.status(400).json({ error: 'Campo empresa es requerido' });
     }
     
+    // IMPORTANTE: Preservar el estado de descalificación
+    const finalDisqualified = session.disqualified || false;
+    
     await Inscrito.create({
       name: session.playerInfo.name,
       email: session.playerInfo.email,
@@ -180,12 +185,13 @@ router.post('/finish', async (req, res) => {
       positionOfficial: session.playerInfo.positionOfficial,
       empresa: session.playerInfo.empresa,
       acceptTerms: session.playerInfo.acceptTerms,
-      disqualified: session.disqualified || false,
+      disqualified: finalDisqualified,  // ← Usar el estado preservado
       totalTimeMs: Number(totalTimeMs) || 0,
       finalScore: Number(finalScore) || 0,
       completedAt: new Date()
     });
-    console.log('✅ Datos guardados en inscritos para:', session.playerInfo.name);
+    
+    console.log('✅ Datos guardados en inscritos para:', session.playerInfo.name, 'Disqualified:', finalDisqualified);
   } catch (error) {
     console.error('❌ Error guardando en inscritos:', error);
     return res.status(500).json({ error: 'Error guardando datos' });
