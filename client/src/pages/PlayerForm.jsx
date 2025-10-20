@@ -6,7 +6,8 @@ export default function PlayerForm({ onPlayerSubmit }) {
     email: '',
     phone: '',
     position: '',
-    positionOfficial: ''
+    positionOfficial: '',
+    empresa: ''
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -17,7 +18,7 @@ export default function PlayerForm({ onPlayerSubmit }) {
     setLoading(true)
 
     // Validar campos requeridos
-    if (!formData.name || !formData.email || !formData.phone || !formData.position) {
+    if (!formData.name || !formData.email || !formData.phone || !formData.position || !formData.empresa) {
       setError('Todos los campos son requeridos')
       setLoading(false)
       return
@@ -148,6 +149,19 @@ export default function PlayerForm({ onPlayerSubmit }) {
           </div>
 
           <div className="form-group">
+            <label htmlFor="empresa">Empresa *</label>
+            <input
+              type="text"
+              id="empresa"
+              name="empresa"
+              value={formData.empresa}
+              onChange={handleChange}
+              required
+              placeholder="Nombre de tu empresa"
+            />
+          </div>
+
+          <div className="form-group">
             <label htmlFor="position">Cargo o posición *</label>
             <select
               id="position"
@@ -174,6 +188,8 @@ export default function PlayerForm({ onPlayerSubmit }) {
               <option value="Líder Técnico">Líder Técnico</option>
               <option value="Arquitecto">Arquitecto</option>
               <option value="Scrum Master">Scrum Master</option>
+              <option value="Administrativo">Administrativo</option>
+              <option value="Comercial">Comercial</option>
             </select>
           </div>
 
@@ -207,11 +223,11 @@ export default function PlayerForm({ onPlayerSubmit }) {
         <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
           <h4 style={{ color: '#667eea', marginBottom: '10px' }}>¿Cómo jugar?</h4>
               <ul style={{ color: '#666', fontSize: '14px', lineHeight: '1.6', paddingLeft: '20px' }}>
-                <li>Toca un agente de IA de la primera columna</li>
-                <li>Toca su definición correcta en la segunda columna</li>
-                <li>El match se hace automáticamente cuando seleccionas uno de cada columna</li>
-                <li>Continúa hasta completar todos los 9 matches</li>
-                <li>Al final responderás una pregunta según tu cargo</li>
+                <li>Selecciona un agente de IA en la primera columna.</li>
+                <li>Luego, elige su definición correcta en la segunda columna.</li>
+                <li>El match se realiza automáticamente al seleccionar una opción de cada columna.</li>
+                <li>Continúa hasta completar los 9 matches.</li>
+                <li>Al final responderás una pregunta según tu cargo.</li>
                 <li>El juego registra tu tiempo y puntuación</li>
                 <li>¡Diviértete aprendiendo sobre Perxia Suite!</li>
               </ul>

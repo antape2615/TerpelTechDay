@@ -9,18 +9,18 @@ router.post('/start', async (req, res) => {
   try {
     console.log('🎮 Iniciando juego - Datos recibidos:', req.body);
     
-    const { name, email, phone, position } = req.body;
+    const { name, email, phone, position, empresa } = req.body;
     
     // Validar datos
-    if (!name || !email || !phone || !position) {
-      console.log('❌ Datos incompletos:', { name: !!name, email: !!email, phone: !!phone, position: !!position });
+    if (!name || !email || !phone || !position || !empresa) {
+      console.log('❌ Datos incompletos:', { name: !!name, email: !!email, phone: !!phone, position: !!position, empresa: !!empresa });
       return res.status(400).json({ error: 'Datos del jugador requeridos' });
     }
     
     console.log('✅ Datos válidos, creando sesión...');
     
     const session = await GameSession.create({ 
-      playerInfo: { name, email, phone, position },
+      playerInfo: { name, email, phone, position, empresa },
       startedAt: new Date() 
     });
     
@@ -94,6 +94,7 @@ router.post('/finish', async (req, res) => {
       email: session.playerInfo.email,
       phone: session.playerInfo.phone,
       position: session.playerInfo.position,
+      empresa: session.playerInfo.empresa,
       totalTimeMs: Number(totalTimeMs) || 0,
       finalScore: Number(finalScore) || 0,
       completedAt: new Date()

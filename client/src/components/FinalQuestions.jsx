@@ -103,6 +103,18 @@ const questionsByPosition = {
     options: ['Perxia-Assist', 'Perxia-agentic', 'Perxia-Hada', 'Perxia-Bot'],
     correctAnswers: ['Perxia-Assist', 'Perxia-agentic'],
     explanation: 'Perxia-Assist gestionaría el conocimiento de las ceremonias y Perxia-agentic facilitaría la coordinación entre diferentes roles del equipo.'
+  },
+  'Administrativo': {
+    question: 'Para automatizar procesos administrativos y gestionar documentación empresarial, ¿qué agentes Perxia utilizarías?',
+    options: ['Perxia-Hada', 'Perxia-Assist', 'Perxia-Bot', 'Perxia-agentic'],
+    correctAnswers: ['Perxia-Hada', 'Perxia-Assist'],
+    explanation: 'Perxia-Hada automatizaría procesos administrativos internos y Perxia-Assist gestionaría la documentación y conocimiento organizacional.'
+  },
+  'Comercial': {
+    question: 'Para optimizar ventas y gestión comercial con clientes, ¿qué agentes Perxia implementarías?',
+    options: ['Perxia-Bot', 'Perxia-Assist', 'Perxia-agentic', 'Perxia-Hada'],
+    correctAnswers: ['Perxia-Bot', 'Perxia-Assist'],
+    explanation: 'Perxia-Bot interactuaría directamente con clientes para ventas y Perxia-Assist gestionaría el conocimiento comercial y seguimiento de oportunidades.'
   }
 }
 
@@ -166,6 +178,12 @@ export default function FinalQuestions({ playerPosition, sessionId, onComplete }
     }
     if (pos.includes('scrum') || pos.includes('master') || pos.includes('agile coach')) {
       return 'Scrum Master'
+    }
+    if (pos.includes('administrativo') || pos.includes('administrative') || pos.includes('admin') || pos.includes('administración')) {
+      return 'Administrativo'
+    }
+    if (pos.includes('comercial') || pos.includes('commercial') || pos.includes('ventas') || pos.includes('sales') || pos.includes('vendedor') || pos.includes('seller')) {
+      return 'Comercial'
     }
     
     // Por defecto, usar Desarrollador
