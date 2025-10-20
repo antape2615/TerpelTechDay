@@ -9,6 +9,7 @@ const InscritoSchema = new mongoose.Schema(
     positionOfficial: { type: String, trim: true },
     empresa: { type: String, required: true, trim: true },
     acceptTerms: { type: Boolean, default: true },
+    disqualified: { type: Boolean, default: false },
     totalTimeMs: { type: Number, default: 0 },
     finalScore: { type: Number, default: 0 },
     completedAt: { type: Date, default: Date.now },

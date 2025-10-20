@@ -77,6 +77,28 @@ router.post('/match', async (req, res) => {
   res.json({ ok: true, question });
 });
 
+// Marcar como descalificado por saltar match
+router.post('/skip-match', async (req, res) => {
+  const { sessionId } = req.body;
+  if (!sessionId) return res.status(400).json({ error: 'sessionId requerido' });
+  
+  const session = await GameSession.findById(sessionId);
+  if (!session) return res.status(404).json({ error: 'Sesión no encontrada' });
+  
+  // Marcar como descalificado
+  session.disqualified = true;
+  session.skippedMatches += 1;
+  await session.save();
+  
+  console.log('❌ Usuario descalificado por saltar match:', session.playerInfo.name);
+  
+  res.json({ 
+    ok: true, 
+    disqualified: true, 
+    message: 'Has sido descalificado por saltar un match' 
+  });
+});
+
 // Responder pregunta
 router.post('/answer', async (req, res) => {
   const { sessionId, question, answer, timeMs } = req.body;
@@ -123,6 +145,7 @@ router.post('/finish', async (req, res) => {
       positionOfficial: session.playerInfo.positionOfficial,
       empresa: session.playerInfo.empresa,
       acceptTerms: session.playerInfo.acceptTerms,
+      disqualified: session.disqualified || false,
       totalTimeMs: Number(totalTimeMs) || 0,
       finalScore: Number(finalScore) || 0,
       completedAt: new Date()

@@ -5,9 +5,9 @@ const router = express.Router();
 
 // Crear inscrito
 router.post('/', async (req, res) => {
-  const { name, email, phone, position, positionOfficial, empresa, acceptTerms, metadata } = req.body || {};
+  const { name, email, phone, position, positionOfficial, empresa, acceptTerms, disqualified, metadata } = req.body || {};
   if (!name || !email || !phone || !position || !empresa) return res.status(400).json({ error: 'name, email, phone, position y empresa son requeridos' });
-  const doc = await Inscrito.create({ name, email, phone, position, positionOfficial, empresa, acceptTerms, metadata });
+  const doc = await Inscrito.create({ name, email, phone, position, positionOfficial, empresa, acceptTerms, disqualified, metadata });
   res.status(201).json({ id: doc._id });
 });
 
@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
     positionOfficial: i.positionOfficial,
     empresa: i.empresa,
     acceptTerms: i.acceptTerms,
+    disqualified: i.disqualified,
     totalTimeMs: i.totalTimeMs,
     finalScore: i.finalScore,
     completedAt: i.completedAt 
@@ -49,6 +50,7 @@ router.get('/accepted-terms', async (_req, res) => {
     positionOfficial: i.positionOfficial,
     empresa: i.empresa,
     acceptTerms: i.acceptTerms,
+    disqualified: i.disqualified,
     totalTimeMs: i.totalTimeMs,
     finalScore: i.finalScore,
     completedAt: i.completedAt 
@@ -67,6 +69,45 @@ router.get('/rejected-terms', async (_req, res) => {
     positionOfficial: i.positionOfficial,
     empresa: i.empresa,
     acceptTerms: i.acceptTerms,
+    disqualified: i.disqualified,
+    totalTimeMs: i.totalTimeMs,
+    finalScore: i.finalScore,
+    completedAt: i.completedAt 
+  })));
+});
+
+// Ruta específica para obtener solo usuarios descalificados
+router.get('/disqualified', async (_req, res) => {
+  const items = await Inscrito.find({ disqualified: true }).sort({ completedAt: -1 }).limit(100);
+  res.json(items.map(i => ({ 
+    id: i._id, 
+    name: i.name, 
+    email: i.email, 
+    phone: i.phone,
+    position: i.position,
+    positionOfficial: i.positionOfficial,
+    empresa: i.empresa,
+    acceptTerms: i.acceptTerms,
+    disqualified: i.disqualified,
+    totalTimeMs: i.totalTimeMs,
+    finalScore: i.finalScore,
+    completedAt: i.completedAt 
+  })));
+});
+
+// Ruta específica para obtener solo usuarios NO descalificados
+router.get('/qualified', async (_req, res) => {
+  const items = await Inscrito.find({ disqualified: false }).sort({ completedAt: -1 }).limit(100);
+  res.json(items.map(i => ({ 
+    id: i._id, 
+    name: i.name, 
+    email: i.email, 
+    phone: i.phone,
+    position: i.position,
+    positionOfficial: i.positionOfficial,
+    empresa: i.empresa,
+    acceptTerms: i.acceptTerms,
+    disqualified: i.disqualified,
     totalTimeMs: i.totalTimeMs,
     finalScore: i.finalScore,
     completedAt: i.completedAt 

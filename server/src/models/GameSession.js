@@ -39,6 +39,8 @@ const GameSessionSchema = new mongoose.Schema(
     finalQuestionTimeMs: { type: Number, default: 0 }, // Tiempo en pregunta final
     finalScore: { type: Number, default: 0 },
     finalQuestionCorrect: { type: Boolean, default: false },
+    disqualified: { type: Boolean, default: false },
+    skippedMatches: { type: Number, default: 0 },
     matches: [MatchSchema],
     questions: [QuestionSchema],
   },

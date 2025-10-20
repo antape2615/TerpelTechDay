@@ -37,7 +37,7 @@ export default function PlayerForm({ onPlayerSubmit }) {
       console.log('🚀 Enviando datos del jugador:', formData)
       
       // Enviar datos al backend para iniciar el juego
-      const response = await fetch(' http://localhost:4000/api/game/start', {
+      const response = await fetch('https://terpeltechday.onrender.com/api/game/start', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
