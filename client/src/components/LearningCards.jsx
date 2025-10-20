@@ -115,7 +115,7 @@ export default function LearningCards({ onComplete }) {
         </div>
 
         <div className="learning-tips">
-          <p>💡 <strong>Tip:</strong> Toca cada tarjeta para ver la definición completa antes de continuar</p>
+          <p>💡 <strong>Tip:</strong> Selecciona cada tarjeta para ver la definición completa antes de continuar</p>
         </div>
       </div>
     </div>

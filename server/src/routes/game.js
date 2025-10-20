@@ -8,6 +8,15 @@ const router = express.Router();
 router.post('/start', async (req, res) => {
   try {
     console.log('🎮 Iniciando juego - Datos recibidos:', req.body);
+    console.log('🔍 Campos específicos:', {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      position: req.body.position,
+      positionOfficial: req.body.positionOfficial,
+      empresa: req.body.empresa,
+      acceptTerms: req.body.acceptTerms
+    });
     
     const { name, email, phone, position, positionOfficial, empresa, acceptTerms } = req.body;
     
@@ -89,6 +98,23 @@ router.post('/finish', async (req, res) => {
   // Solo guardar en inscritos, no en GameSession
   try {
     const Inscrito = require('../models/Inscrito');
+    
+    console.log('💾 Datos a guardar en inscritos:', {
+      name: session.playerInfo.name,
+      email: session.playerInfo.email,
+      phone: session.playerInfo.phone,
+      position: session.playerInfo.position,
+      positionOfficial: session.playerInfo.positionOfficial,
+      empresa: session.playerInfo.empresa,
+      acceptTerms: session.playerInfo.acceptTerms
+    });
+    
+    // Validar que empresa no sea undefined
+    if (!session.playerInfo.empresa) {
+      console.error('❌ Campo empresa es undefined:', session.playerInfo);
+      return res.status(400).json({ error: 'Campo empresa es requerido' });
+    }
+    
     await Inscrito.create({
       name: session.playerInfo.name,
       email: session.playerInfo.email,

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import './App.css'
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://terpeltechday.onrender.com/api'
+const API_URL = import.meta.env.VITE_API_URL || ' http://localhost:4000/api'
 
 function App() {
   const [inscritos, setInscritos] = useState([])
