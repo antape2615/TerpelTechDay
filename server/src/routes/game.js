@@ -139,6 +139,18 @@ router.post('/finish', async (req, res) => {
   const session = await GameSession.findById(sessionId);
   if (!session) return res.status(404).json({ error: 'Sesión no encontrada' });
   
+  console.log('🔍 Estado de la sesión antes de guardar:', {
+    sessionId: session._id,
+    disqualified: session.disqualified,
+    finishedAt: session.finishedAt,
+    skippedMatches: session.skippedMatches
+  });
+  
+  // Si ya está descalificado, mantener ese estado
+  if (session.disqualified) {
+    console.log('⚠️ Sesión ya marcada como descalificada, manteniendo estado');
+  }
+  
   // Solo guardar en inscritos, no en GameSession
   try {
     const Inscrito = require('../models/Inscrito');
@@ -150,7 +162,8 @@ router.post('/finish', async (req, res) => {
       position: session.playerInfo.position,
       positionOfficial: session.playerInfo.positionOfficial,
       empresa: session.playerInfo.empresa,
-      acceptTerms: session.playerInfo.acceptTerms
+      acceptTerms: session.playerInfo.acceptTerms,
+      disqualified: session.disqualified
     });
     
     // Validar que empresa no sea undefined
