@@ -111,6 +111,28 @@ router.post('/answer', async (req, res) => {
   res.json({ correct });
 });
 
+// Terminar juego manualmente (descalificación)
+router.post('/end-game', async (req, res) => {
+  const { sessionId } = req.body;
+  if (!sessionId) return res.status(400).json({ error: 'sessionId requerido' });
+  
+  const session = await GameSession.findById(sessionId);
+  if (!session) return res.status(404).json({ error: 'Sesión no encontrada' });
+  
+  // Marcar como descalificado por terminar manualmente
+  session.disqualified = true;
+  session.finishedAt = new Date();
+  await session.save();
+  
+  console.log('❌ Usuario descalificado por terminar juego manualmente:', session.playerInfo.name);
+  
+  res.json({ 
+    ok: true, 
+    disqualified: true, 
+    message: 'Has sido descalificado por terminar el juego manualmente' 
+  });
+});
+
 // Finalizar sesión con tiempo total
 router.post('/finish', async (req, res) => {
   const { sessionId, totalTimeMs, learningTimeMs, gameTimeMs, finalQuestionTimeMs, finalScore, finalQuestionCorrect } = req.body;
