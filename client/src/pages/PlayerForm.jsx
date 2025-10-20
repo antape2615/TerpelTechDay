@@ -7,7 +7,8 @@ export default function PlayerForm({ onPlayerSubmit }) {
     phone: '',
     position: '',
     positionOfficial: '',
-    empresa: ''
+    empresa: '',
+    acceptTerms: true
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -80,10 +81,19 @@ export default function PlayerForm({ onPlayerSubmit }) {
   }
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     })
+  }
+
+  const handleFocus = (e) => {
+    e.target.style.borderColor = '#00FF88'
+  }
+
+  const handleBlur = (e) => {
+    e.target.style.borderColor = '#e1e5e9'
   }
 
   return (
@@ -168,7 +178,24 @@ export default function PlayerForm({ onPlayerSubmit }) {
               name="position"
               value={formData.position}
               onChange={handleChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               required
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '2px solid #e1e5e9',
+                borderRadius: '25px',
+                fontSize: '16px',
+                backgroundColor: 'white',
+                cursor: 'pointer',
+                appearance: 'none',
+                backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 12px center',
+                backgroundSize: '16px',
+                paddingRight: '40px'
+              }}
             >
               <option value="">Selecciona tu cargo</option>
               <option value="Desarrollador">Desarrollador</option>
@@ -206,6 +233,34 @@ export default function PlayerForm({ onPlayerSubmit }) {
             <small style={{ color: '#666', fontSize: '12px', marginTop: '5px', display: 'block' }}>
               Escribe el nombre de tu cargo oficial
             </small>
+          </div>
+
+          <div className="form-group" style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer', fontSize: '14px', color: '#666', lineHeight: '1.4' }}>
+              <input
+                type="checkbox"
+                name="acceptTerms"
+                checked={formData.acceptTerms}
+                onChange={handleChange}
+                style={{ 
+                  marginRight: '10px', 
+                  marginTop: '2px',
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  accentColor: '#16601D',
+                  cursor: 'pointer'
+                }}
+              />
+              <div style={{ flex: 1 }}>
+                <div style={{ marginBottom: '5px' }}>
+                  ¿Aceptas recibir información de Periferia IT Group a través de los datos que has registrado?
+                </div>
+                <div style={{ fontSize: '12px', color: '#888', fontStyle: 'italic' }}>
+                  (Marcando esta opción autorizas a Periferia a enviarte información relacionada a través de los medios proporcionados.)
+                </div>
+              </div>
+            </label>
           </div>
 
           {error && <div className="error">{error}</div>}

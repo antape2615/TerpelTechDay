@@ -9,7 +9,7 @@ router.post('/start', async (req, res) => {
   try {
     console.log('🎮 Iniciando juego - Datos recibidos:', req.body);
     
-    const { name, email, phone, position, empresa } = req.body;
+    const { name, email, phone, position, positionOfficial, empresa, acceptTerms } = req.body;
     
     // Validar datos
     if (!name || !email || !phone || !position || !empresa) {
@@ -20,7 +20,7 @@ router.post('/start', async (req, res) => {
     console.log('✅ Datos válidos, creando sesión...');
     
     const session = await GameSession.create({ 
-      playerInfo: { name, email, phone, position, empresa },
+      playerInfo: { name, email, phone, position, positionOfficial, empresa, acceptTerms },
       startedAt: new Date() 
     });
     
@@ -94,7 +94,9 @@ router.post('/finish', async (req, res) => {
       email: session.playerInfo.email,
       phone: session.playerInfo.phone,
       position: session.playerInfo.position,
+      positionOfficial: session.playerInfo.positionOfficial,
       empresa: session.playerInfo.empresa,
+      acceptTerms: session.playerInfo.acceptTerms,
       totalTimeMs: Number(totalTimeMs) || 0,
       finalScore: Number(finalScore) || 0,
       completedAt: new Date()
