@@ -38,7 +38,7 @@ function App() {
       
       // Filtrar solo los que completaron el juego (no descalificados)
       const completados = response.data.filter(inscrito => 
-        !inscrito.isDisqualified && inscrito.totalTimeMs > 0
+        !inscrito.disqualified && inscrito.totalTimeMs > 0
       )
       
       // Ordenar por tiempo (menor tiempo = mejor)
