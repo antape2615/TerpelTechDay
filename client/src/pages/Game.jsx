@@ -315,15 +315,11 @@ export default function Game({ playerInfo, onLogout }) {
             )}
 
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
-              {score === originalPairs.length ? (
+              {score === originalPairs.length && (
                 <div style={{ padding: '20px', background: '#d4edda', borderRadius: '8px', marginBottom: '20px' }}>
                   <h3 style={{ color: '#155724', margin: '0 0 10px 0' }}>🎉 ¡Todos los matches completados!</h3>
                   <p style={{ color: '#155724', margin: '0' }}>Ahora responderás la pregunta final según tu cargo</p>
                 </div>
-              ) : (
-                <button onClick={finishGame} className="btn btn-danger">
-                  Terminar Juego
-                </button>
               )}
             </div>
           </>
